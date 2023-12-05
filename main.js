@@ -13,7 +13,10 @@ function GameBoard(){
         }
     }
 
-    const getBoard = () => board;
+    const getBoard = () => {
+      return board.map((row) =>
+        row.map((cell) => cell.getValue()));
+    }
 
     const dropMove = (move, player) => {
         
@@ -31,9 +34,8 @@ function GameBoard(){
     }
 
     const printBoard = () => {
-        const boardWithValues = board.map((row) =>
-        row.map((cell) => cell.getValue()));
-        console.log(boardWithValues);
+     
+        console.log(getBoard());
     }
 
     return{getBoard, dropMove, printBoard};
@@ -91,8 +93,20 @@ function GameController(
         board.dropMove(move,getActivePlayer().token);
 
         printRound();
+        checkWin();
         switchPlayer();
     }
+
+
+    const checkWin = () => {
+        let currentBoard = board.getBoard();
+        if(currentBoard[0][0] == 'x' &&
+            currentBoard[0][1] == 'x' &&
+            currentBoard[0][2] == 'x'
+        ){
+            console.log("You won");
+        }
+    } 
 
 
     printRound();
