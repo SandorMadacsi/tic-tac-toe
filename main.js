@@ -1,30 +1,43 @@
 
+const winConditions = [
+     [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8]
+    ],
+    
+    [
+        [0,3,6],
+        [1,4,7],
+        [2.5,8]
+    ],
+    [
+        [0,4,8],
+        [2,4,6]
+    ]
+
+]
+
 
 function GameBoard(){
-    const rows = 3;
-    const collumns = 3;
+
     const board = [];
 
     //populating board with cells
-    for(let i = 0; i < rows; i++){
-        board[i] = [];
-        for(let j = 0; j < collumns; j++){
-            board[i].push(Cell());
-        }
+    for(let i = 0; i < 9; i++){
+            board.push(Cell());
     }
 
     const getBoard = () => {
-      return board.map((row) =>
-        row.map((cell) => cell.getValue()));
+      return board.map((cell) => cell.getValue());
     }
 
     const dropMove = (move, player) => {
         
-        let [row, column] = move;
-        if(board[row][column] !== undefined && 
-             board[row][column].getValue() === null
+        if(board[move] !== undefined && 
+             board[move].getValue() === null
         ){
-            board[row][column].addMove(player);
+            board[move].addMove(player);
     
         }else{
             console.log('false move');
@@ -43,6 +56,7 @@ function GameBoard(){
 }
 
 function Cell(){
+
     let value = null;
     
     const addMove = (player) => {
@@ -62,19 +76,28 @@ function GameController(
     player2 = "Player 2)"){
 
     const board = GameBoard();
-
+   
     const players = [
         {
             name: player1,
-            token: 'x'
+            token: 'x',
+            score: 0
         },
         {
             name: player2,
-            token: 'o'
+            token: 'o',
+            score: 0
         }
     ];
 
+
+    const setScore = (score) =>{
+        activePlayer.score = score;
+        console.log(`${activePlayer.name}'s score: ${activePlayer.score}`);
+    }
+
     let activePlayer = players[0];
+    let isPlaying = true;
 
     const switchPlayer = () => {
         activePlayer == players[0] ? activePlayer = players[1] : activePlayer = players[0];
@@ -82,41 +105,82 @@ function GameController(
 
     const getActivePlayer = () => activePlayer;
 
+    const setState = () => {
+        isPlaying = false;
+    }
+
+    const getState = () => isPlaying;
+
     const printRound = () => {
         board.printBoard();
         console.log(`${activePlayer.name}'s turn.`);
     }
 
     const playRound  = (move) => {
-        let [row , column] = move;
-        console.log(`Dropping ${getActivePlayer().name}'s token into row: ${row}, column: ${column} ...`);
+        
+        console.log(`Dropping ${getActivePlayer().name}'s token into cell: ${move}`);
         board.dropMove(move,getActivePlayer().token);
 
         printRound();
-        checkWin();
-        switchPlayer();
+        for(let winCon in winConditions){
+            if(getState() == true){
+                checkRow(winConditions[winCon]);
+            }else{
+                break;
+            }
+        }
+
+        // checkRow(rows);
+        // checkRow(columns);
+        // checkRow(diag);
+       // switchPlayer();
+      
+    
+        
     }
 
-
-    const checkWin = () => {
-        let currentBoard = board.getBoard();
-        if(currentBoard[0][0] == 'x' &&
-            currentBoard[0][1] == 'x' &&
-            currentBoard[0][2] == 'x'
-        ){
-            console.log("You won");
+    const playGame = () =>{
+        while(getState()){
+        let input = prompt(`${getActivePlayer().name} s choice: `);
+        playRound(input);
         }
-    } 
+        console.log("game over");
+}
+    
+
+    const checkRow = (rows) => {
+        let currentBoard = board.getBoard();
+        let currentRow = [];
+        for(let i = 0; i < rows.length; i++){
+            currentRow = rows[i];
+            setScore(0);
+            console.log(currentRow);
+            currentRow.forEach(element => {
+                if(currentBoard[element] === activePlayer.token){
+                  setScore(activePlayer.score += 1);
+                }
+                
+            });
+            if(activePlayer.score == 3){
+                console.log(`${activePlayer.name} won`);
+                setState();
+            }
+            
+        }
+
+    }
 
 
     printRound();
 
-
-
     return{
-        playRound,
-        getActivePlayer
+        playGame,
+        getActivePlayer,
+        isPlaying
     };
 }
 
 const game = GameController();
+game.playGame();
+
+    
