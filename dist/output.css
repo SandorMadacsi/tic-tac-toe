@@ -534,12 +534,149 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.bg-blue-950 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(23 37 84 / var(--tw-bg-opacity));
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
 }
 
 .bg-slate-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(100 116 139 / var(--tw-bg-opacity));
+}
+
+html, body, *{
+  margin:0;
+  padding: 0;
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+h1{
+  font-size: 70px;
+}
+
+.container{
+  width:960px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin:100px auto;
+  border: 1px solid black
+}
+
+.canvas-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin:0;
+  padding:0;
+  width:960px;
+  height:960px;
+  border:1px solid black;
+}
+
+.ui{
+  display: flex;
+  justify-content: space-evenly;
+  width: 960px;
+  background-color: rgb(54,69,79);
+  color: rgb(219,226,233);
+  border:1px solid black;
+}
+
+.unit-row{
+  display:flex;
+  flex-direction: column;
+  border: none;
+}
+
+.unit{
+  box-sizing:border-box;
+  background-color: white;
+  border:1px solid black;
+}
+
+.filled{
+  background-color: black;
+}
+
+button{
+  padding:20px 40px;
+  margin: 20px;
+}
+
+input,
+label,
+button{
+  font-size: 28px;
+  margin:50px;
+}
+
+.checkbox{
+  width: 30px;
+  height:30px;
+}
+
+button{
+  background-color: salmon;
+  border: 1px solid black;
+}
+
+button:hover {
+  background-color:  rgb(185,185,185);
+}
+
+button:active {
+  background-color: rgb(255, 77, 77);
+  box-shadow: 0 5px rgb(219,226,233);
+  transform: translateY(4px);
+}
+
+footer {
+  font-size: 39px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+
+footer a img{
+  width:40px;
+  transition: transform .7s ease-in-out;
+}
+
+img:hover{
+  transform: rotate(360deg);
 }

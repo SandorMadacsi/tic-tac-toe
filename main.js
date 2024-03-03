@@ -32,18 +32,19 @@ function GameBoard(){
       return board.map((cell) => cell.getValue());
     }
 
-    const dropMove = (move, player) => {
-        
+    const checkMove = move =>{
         if(board[move] !== undefined && 
-             board[move].getValue() === null
-        ){
+            board[move].getValue() === null
+       )return true;
+       else
+        return false;
+       
+    }
+
+    const dropMove = (move, player) => {
             board[move].addMove(player);
     
-        }else{
-            console.log('false move');
-            return;
-        };
-        
+    
     }
 
     const printBoard = () => {
@@ -51,7 +52,7 @@ function GameBoard(){
         console.log(getBoard());
     }
 
-    return{getBoard, dropMove, printBoard};
+    return{getBoard, dropMove,checkMove, printBoard};
 
 }
 
@@ -93,7 +94,6 @@ function GameController(
 
     const setScore = (score) =>{
         activePlayer.score = score;
-        console.log(`${activePlayer.name}'s score: ${activePlayer.score}`);
     }
 
     let activePlayer = players[0];
@@ -113,37 +113,43 @@ function GameController(
 
     const printRound = () => {
         board.printBoard();
-        console.log(`${activePlayer.name}'s turn.`);
+        console.log(`${activePlayer.name}'s turn`);
+        console.log("=================");
     }
 
     const playRound  = (move) => {
         
-        console.log(`Dropping ${getActivePlayer().name}'s token into cell: ${move}`);
-        board.dropMove(move,getActivePlayer().token);
-
-        printRound();
-        for(let winCon in winConditions){
-            if(getState() == true){
-                checkRow(winConditions[winCon]);
-            }else{
-                break;
+        
+        if(board.checkMove(move)){
+            console.log(`Dropping ${getActivePlayer().name}'s token into cell: ${move}`);
+            board.dropMove(move,getActivePlayer().token);
+            printRound();
+            for(let winCon in winConditions){
+                if(getState() == true){
+                    checkRow(winConditions[winCon]);
+                }else{
+                    break;
+                }
             }
+            switchPlayer();
+            return true;
+        }else{
+            return false;
         }
-
-        // checkRow(rows);
-        // checkRow(columns);
-        // checkRow(diag);
-       // switchPlayer();
-      
-    
         
     }
 
     const playGame = () =>{
+
         while(getState()){
         let input = prompt(`${getActivePlayer().name} s choice: `);
-        playRound(input);
+        let validRound = playRound(input);
+        if(!validRound){
+            console.log("false input");
+            input = prompt(`${getActivePlayer().name} s choice: `);
+            validRound = playRound(input);
         }
+    }
         console.log("game over");
 }
     
@@ -151,25 +157,25 @@ function GameController(
     const checkRow = (rows) => {
         let currentBoard = board.getBoard();
         let currentRow = [];
-        for(let i = 0; i < rows.length; i++){
-            currentRow = rows[i];
-            setScore(0);
-            console.log(currentRow);
-            currentRow.forEach(element => {
-                if(currentBoard[element] === activePlayer.token){
-                  setScore(activePlayer.score += 1);
+        for(let row in rows){
+            if(getState()){
+                currentRow = rows[row];
+                setScore(0);
+                // console.log(currentRow);
+                currentRow.forEach(element => {
+                    if(currentBoard[element] === activePlayer.token){
+                      setScore(activePlayer.score += 1);
+                    }
+                    
+                });
+                if(activePlayer.score == 3){
+                     console.log(`${activePlayer.name} won`);
+                    setState();
                 }
-                
-            });
-            if(activePlayer.score == 3){
-                console.log(`${activePlayer.name} won`);
-                setState();
             }
-            
         }
 
     }
-
 
     printRound();
 
@@ -181,6 +187,40 @@ function GameController(
 }
 
 const game = GameController();
-game.playGame();
+//game.playGame();
+const boardDom = BoardDOM();
+boardDom.showBoard();
+
+
 
     
+function BoardDOM(){
+    let canvas = document.querySelector('.canvas-container');
+    let clearButton = document.querySelector('button');
+    
+    const showBoard = () =>{
+        canvas.innerHTML="";
+        for(let i = 0; i < 3; i++){
+            let row = document.createElement('div');
+            row.classList.add('unit-row');
+        
+            for(let j = 0; j < 3; j++){
+            
+                let unit = document.createElement('div');
+                unit.classList.add('unit');
+                unit.setAttribute('style', `width: 150px;
+                                            height: 150px;
+                                            background-color: "red"`);
+                row.appendChild(unit);
+            }
+            canvas.appendChild(row);
+        }
+    }
+    return{showBoard};
+
+
+    // let units = document.querySelectorAll('.unit');
+    // units.forEach(unit =>  unit.addEventListener('mouseover', fillIn));
+
+}
+
