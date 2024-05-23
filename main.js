@@ -118,8 +118,8 @@ function GameController(
     }
 
     const playRound  = (move) => {
-        
-        
+        console.log(move);
+        console.log(board.checkMove(move));
         if(board.checkMove(move)){
             console.log(`Dropping ${getActivePlayer().name}'s token into cell: ${move}`);
             board.dropMove(move,getActivePlayer().token);
@@ -139,19 +139,19 @@ function GameController(
         
     }
 
-    const playGame = () =>{
+    // const playGame = (input) =>{
 
-        while(getState()){
-        let input = prompt(`${getActivePlayer().name} s choice: `);
-        let validRound = playRound(input);
-        if(!validRound){
-            console.log("false input");
-            input = prompt(`${getActivePlayer().name} s choice: `);
-            validRound = playRound(input);
-        }
-    }
-        console.log("game over");
-}
+    //     while(getState()){
+    //     //let input = prompt(`${getActivePlayer().name} s choice: `);
+    //     let validRound = playRound(input);
+    //         if(!validRound){
+    //             console.log("false input");
+    //            // input = prompt(`${getActivePlayer().name} s choice: `);
+    //             validRound = playRound(input);
+    //         }
+    //     }
+    //     console.log("game over");
+    // }
     
 
     const checkRow = (rows) => {
@@ -180,16 +180,13 @@ function GameController(
     printRound();
 
     return{
-        playGame,
+        playRound,
+        getBoard : board.getBoard,
         getActivePlayer,
         isPlaying
     };
 }
 
-const game = GameController();
-//game.playGame();
-const boardDom = BoardDOM();
-boardDom.showBoard();
 
 
 
@@ -197,30 +194,59 @@ boardDom.showBoard();
 function BoardDOM(){
     let canvas = document.querySelector('.canvas-container');
     let clearButton = document.querySelector('button');
+
+
+    const game = GameController();
     
-    const showBoard = () =>{
+
+
+  
+    const displayBoard = () =>{
+
+        const board = game.getBoard();
+
         canvas.innerHTML="";
-        for(let i = 0; i < 3; i++){
-            let row = document.createElement('div');
-            row.classList.add('unit-row');
-        
-            for(let j = 0; j < 3; j++){
-            
-                let unit = document.createElement('div');
-                unit.classList.add('unit');
-                unit.setAttribute('style', `width: 150px;
-                                            height: 150px;
-                                            background-color: "red"`);
-                row.appendChild(unit);
-            }
-            canvas.appendChild(row);
-        }
+        canvas.setAttribute('style', `display:grid;
+                                      grid-template-columns:repeat(3, 1fr)`);
+
+
+                    
+        board.forEach((cell , i) => {
+            let unit = document.createElement('div');
+            unit.classList.add('unit');
+            unit.setAttribute('style', `width: 100%;
+                                        height: 100%;
+                                        background-color: white`);
+            unit.innerHTML= i;
+            canvas.appendChild(unit);
+            unit.addEventListener('click',clickMove);
+        });
+       
+
+    
+  
     }
-    return{showBoard};
+
+        function clickMove(e){
+
+            const selectedDiv = Number(e.currentTarget.innerHTML);
+            console.log(selectedDiv);
+
+            if(!selectedDiv){
+                console.log("the field is taken");
+                return;
+
+            } 
+
+            game.playRound(selectedDiv);
+            displayBoard();
 
 
-    // let units = document.querySelectorAll('.unit');
-    // units.forEach(unit =>  unit.addEventListener('mouseover', fillIn));
+        }
+
+
+    displayBoard();
 
 }
+BoardDOM();
 
