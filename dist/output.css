@@ -645,6 +645,10 @@ h1{
   border:1px solid black;
 }
 
+.unit:hover{
+  background-color: lightgoldenrodyellow;
+}
+
 .filled{
   background-color: black;
 }
@@ -700,3 +704,4 @@ footer a img{
 img:hover{
   transform: rotate(360deg);
 }
+

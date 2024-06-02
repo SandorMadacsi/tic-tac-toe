@@ -223,18 +223,16 @@ function BoardDOM(){
             valContainer.classList.add('valConainer');
             unit.setAttribute('style', `width: 100%;
                                         height: 100%;
-                        
                                         display: flex;
                                         justify-content: center;
-                                        align-items: center;
-                                       background-color: white`);
+                                        align-items: center;`);
 
             valContainer.setAttribute('style',`
                                         display: flex;
                                         justify-content: center;
                                         align-items: center;
-                                        height: 150px;
                                         width: 150px;
+                                        height: 150px;
                                         `);
 
             value.setAttribute('style',`
