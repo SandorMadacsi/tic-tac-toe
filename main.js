@@ -213,13 +213,40 @@ function BoardDOM(){
                     
         board.forEach((cell , i) => {
             let unit = document.createElement('div');
+            unit.id = i;
+            let valContainer = document.createElement('div');
             unit.classList.add('unit');
+            let value = document.createElement('h1');
+            value.innerHTML = "Test";
+
+            valContainer.appendChild(value);
+            valContainer.classList.add('valConainer');
             unit.setAttribute('style', `width: 100%;
                                         height: 100%;
-                                        background-color: white`);
-            unit.innerHTML= i;
+                        
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                       background-color: white`);
+
+            valContainer.setAttribute('style',`
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        height: 150px;
+                                        width: 150px;
+                                        `);
+
+            value.setAttribute('style',`
+            font-size:180px;
+            `);
+            unit.appendChild(valContainer);
+        
+
+
             canvas.appendChild(unit);
             unit.addEventListener('click',clickMove);
+            value.innerText= cell;
         });
        
 
@@ -229,13 +256,12 @@ function BoardDOM(){
 
         function clickMove(e){
 
-            const selectedDiv = Number(e.currentTarget.innerHTML);
+            const selectedDiv = Number(e.currentTarget.id);
             console.log(selectedDiv);
 
-            if(!selectedDiv){
+            if(selectedDiv !==0 && !selectedDiv){
                 console.log("the field is taken");
                 return;
-
             } 
 
             game.playRound(selectedDiv);
