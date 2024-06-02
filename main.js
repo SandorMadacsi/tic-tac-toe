@@ -38,12 +38,10 @@ function GameBoard(){
        )return true;
        else
         return false;
-       
     }
 
     const dropMove = (move, player) => {
             board[move].addMove(player);
-    
     
     }
 
@@ -73,7 +71,7 @@ function Cell(){
 }
 
 function GameController(
-    player1 = "Player 1",
+    player1 =  "Player 1",
     player2 = "Player 2)"){
 
     const board = GameBoard();
@@ -161,7 +159,6 @@ function GameController(
             if(getState()){
                 currentRow = rows[row];
                 setScore(0);
-                // console.log(currentRow);
                 currentRow.forEach(element => {
                     if(currentBoard[element] === activePlayer.token){
                       setScore(activePlayer.score += 1);
@@ -193,13 +190,18 @@ function GameController(
     
 function BoardDOM(){
     let canvas = document.querySelector('.canvas-container');
-    let clearButton = document.querySelector('button');
+    let player1 = prompt("Enter your name for player 1 ");
+    let player2 = prompt("Enter your name for player 2 ");
+    player1Dom.innerText = "Player 1: ";
+    player2Dom.innerText = "Player 2: ";
 
+    let player1Dom = document.getElementById("player1");
+    let player2Dom = document.getElementById("player2");
 
-    const game = GameController();
-    
+    player1Dom.innerText += player1;
+    player2Dom.innerText += player2;
 
-
+    const game = GameController(player1, player2);
   
     const displayBoard = () =>{
 
@@ -212,6 +214,7 @@ function BoardDOM(){
 
                     
         board.forEach((cell , i) => {
+
             let unit = document.createElement('div');
             unit.id = i;
             let valContainer = document.createElement('div');
@@ -264,8 +267,6 @@ function BoardDOM(){
 
             game.playRound(selectedDiv);
             displayBoard();
-
-
         }
 
 
